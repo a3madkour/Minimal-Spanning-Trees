@@ -118,9 +118,7 @@ bool isPowerOfTwo(int n)
 void NCut (Graph * graph, int num_partitions, vector <int>& weights){
 
      vector < vector < int > > dist;
-     // cout<<"Calculating floydWarshall"<<endl;
      floydWarshall(graph,dist);
-     // cout<<"done"<<endl;
      vector < vector < int> > W ;
      vector < vector < int> > D ;
      vector < vector < int> > Ma ;
@@ -137,12 +135,8 @@ void NCut (Graph * graph, int num_partitions, vector <int>& weights){
               D.push_back(v);
               Ma.push_back(v);
      }
-     // cout<<"Now calculating W"<<endl;
     calculateW(W,dist,graph);
-    // cout<<"done"<<endl;
-    // cout<<"Now calculating D"<<endl;
     calculateD(D,W,dist,graph);
-    // cout<<"done"<<endl;
     // note, to understand this part take a look in the MAN pages, at section of parameters.
 
     int     N = graph->getV();
@@ -168,7 +162,6 @@ void NCut (Graph * graph, int num_partitions, vector <int>& weights){
     double * AP  = new double [N*(N+1)/2];
     double * BP  = new double [N*(N+1)/2];
 // end of declarations
- // cout<<"Calculating M"<<endl;
     for (int i = 0; i < N; ++i)
     {
         for (int j = 0; j < N; ++j)
@@ -177,7 +170,6 @@ void NCut (Graph * graph, int num_partitions, vector <int>& weights){
         }
     }
 
-    // cout<<"Done now calculating AP and BP"<<endl;
     for (int j = 0; j < N; ++j)
     {
         for (int i = 0; i <= j; ++i)
@@ -189,72 +181,22 @@ void NCut (Graph * graph, int num_partitions, vector <int>& weights){
 
     }
 
-    // cout<<"AP: "<<endl;
-    // for (int i = 0; i < N*(N+1)/2 ; ++i)
-    // {
-    //     cout<<AP[i]<<" ";
-    // }
-    // cout<<endl;
-    //     cout<<"BP: "<<endl;
-    // for (int i = 0; i < N*(N+1)/2; ++i)
-    // {
-    //     cout<<BP[i]<<" ";
-    // }
-    // cout<<endl;
-    // cout<<"Begin lapack call"<<endl;
     INFO = LAPACKE_dspgvx(LAPACK_COL_MAJOR,ITYPE,JOBZ,RANGE,UPLO,N,AP,BP,VL,VU,IL,IU,ABSTOL,&M,Wi,Z,LDZ,IFAIL);
-    // cout<<"done"<<endl;
-    // checks INFO, if INFO != 0 something goes wrong, for more information see the MAN page of dgetrf.
-
     if(INFO)
     {
-        // cout << "an error occured : "<< INFO << endl << endl;
     }else{
-        // cout<<"M: "<<M<<endl;
-        // cout<<"W: "<<Wi[0]<<endl;
-        // cout<<"Z: "<<endl;
-        // for (int i = 0; i < N; ++i)
-        // {
-        //     cout<<Z[i]<<endl;
-        // }
-
     }
 
-    // delete [] Wi;
-    // delete [] Z;
-    // delete [] WORK;
-    // cout<<"Eignevector:"<<endl;
-    // for (int i = 0; i < N; ++i)
-    // {
-    //     cout<<Z[i]<<" ";
-    // }
-    // cout<<endl;
     Graph negPartition, posPartition;
-    // cout<<"Splitting graph into two partitions using the eignevector"<<endl;
     graph->readSegments(&negPartition, &posPartition, Z);
 
 
-    // cout << "posPartition:  " << posPartition.getV()<<"," <<" " << posPartition.getE()<<endl;
     Edge * posPartitionEdge = posPartition.getEdge();
-    // for (int i = 0; i < posPartition.getE(); ++i)
-    // {
 
-    //  cout << posPartitionEdge[i].src << "---" << posPartitionEdge[i].dest << " == " << posPartitionEdge[i].weight << endl;
-    // }
-
-    // cout << "negPartition:  " << negPartition.getV()<<"," <<" " << negPartition.getE()<<endl;
     Edge * negPartitionEdge = negPartition.getEdge();
-    // for (int i = 0; i < negPartition.getE(); ++i)
-    // {
-
-    //  cout << negPartitionEdge[i].src << "---" << negPartitionEdge[i].dest << " == " << negPartitionEdge[i].weight << endl;
-    // }
-    // cout<<"posModKruskal"<<endl;
     int posWeight = posPartition.modKruskalMST();
-    // cout<<"negModKruskal"<<endl;
     int negWeight = negPartition.modKruskalMST();
 
-    // cout<<"Done with this recursion"<<endl;
     if(num_partitions == 2){
         weights.push_back(posWeight);
         weights.push_back(negWeight);   
@@ -289,7 +231,6 @@ int main(int argc, char * argv[])
            cout<<"No graph specified"<<endl;
             graph = new Graph("graphs/graph10Afull.txt");
             num_partitions = 16;
-           // return 0;
      }else if(argc == 2){
                 graph = new Graph(argv[1]);
 

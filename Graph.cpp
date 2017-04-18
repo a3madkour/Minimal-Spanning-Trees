@@ -24,8 +24,6 @@ Graph:: Graph (int v, int e, Graph* Parent=0){
         v.id = i;
         Edge::vertices.push_back(v);
     }
-    // edge = (struct Edge*) malloc( E * sizeof( struct Edge ) );
-    edge = new Edge [E];
     indices = new int [V];
 
 }
@@ -51,7 +49,6 @@ Graph :: Graph(string filename){
     }
     edge = new Edge [E];
 
-    // edge = (struct Edge*) malloc( E * sizeof( struct Edge ) );
     char e;
     int from, to, dist_val;
     int iter = 0;
@@ -196,7 +193,6 @@ void Graph :: readSegments(Graph *negPartition, Graph *posPartition, double * ei
         }
         else
         {
-            // posPartition->setIndex(newPartNums.at(i),posIndex);
             newPartNums.at(i) = posIndex++;
         }
     }
@@ -405,19 +401,16 @@ int Graph :: modKruskalMST()
 
                 }
                 edgeVector.erase(edgeVector.begin()+index);
-                //cout<<"v.size(): "<<v.size()<<endl;
                 int x = find(subsets, minEdge.src);
                 int y = find(subsets, minEdge.dest);
                 minEdge.x = x;
                 minEdge.y = y;
                 // If including this edge does't cause cycle, include it
                 // in result and increment the index of result for next edge
-                //cout<<"mamamia 3"<<endl;
                 if (x != y  &&  e < V - 1)
                     {
                     Edge::vertices[minEdge.src].mst_degree++;
                     Edge::vertices[minEdge.dest].mst_degree++;
-                    //cout<<"mamamia 2"<<endl;
                     MST.push_back(minEdge);
                     e++;
                     MSTweight+=minEdge.weight;
@@ -554,9 +547,7 @@ void Graph ::dijkstra(int src, vector <Edge> &newEdges, bool useParent){
 
             for (int j = 0; j <V; ++j)
             {
-                // cout<<"i:"<<i<<" j:"<<j<<" indices[j]: "<<indices[j]<<endl;
                 if(i == indices[j] && i!=src){
-                    // cout<<"i: "<<i<<" j: "<<j<<" dist[i]: "<<dist[i]<<endl;
                     if(dist[i]< minDist){
 
                             minDist = dist[i];
@@ -568,13 +559,10 @@ void Graph ::dijkstra(int src, vector <Edge> &newEdges, bool useParent){
 
         vector <int> path;
         path.push_back(src);
-        //cout<<"dest:"<<dest<<" , src: "<<indices[src]<<endl;
         findPath(parent,dest,indexSrc,path);
-        //cout<<endl;
         for (int i = 0; i < path.size()-1; ++i)
         {
             Edge e;
-            //cout<<"path[i]: "<<path[i]<<" path[i+1]:"<<path[i+1]<<endl;
             e.src= path[i];
             e.dest = path[i+1];
             e.weight = graph->adjMat[e.src][e.dest];

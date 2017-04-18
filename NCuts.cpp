@@ -8,6 +8,7 @@
 #include <fstream>
 #include <string>
 #include <algorithm>
+#include <ctime>
 #include <numeric>
 #include "Graph.h"
 
@@ -116,9 +117,12 @@ bool isPowerOfTwo(int n)
 }
 
 void NCut (Graph * graph, int num_partitions, vector <int>& weights){
-
+     clock_t start;
+     start = clock();
      vector < vector < int > > dist;
      floydWarshall(graph,dist);
+     clock_t endFlyod = clock()-start;
+     cout<<"End of floyd-warshall: " << (clock() - start) / (double) (CLOCKS_PER_SEC / 1000) << " ms" <<endl;   
      vector < vector < int> > W ;
      vector < vector < int> > D ;
      vector < vector < int> > Ma ;
@@ -197,6 +201,8 @@ void NCut (Graph * graph, int num_partitions, vector <int>& weights){
     int posWeight = posPartition.modKruskalMST();
     int negWeight = negPartition.modKruskalMST();
 
+    cout<<"End of ncut: " << (clock() - start) / (double) (CLOCKS_PER_SEC / 1000) << " ms" <<endl;   
+
     if(num_partitions == 2){
         weights.push_back(posWeight);
         weights.push_back(negWeight);   
@@ -216,7 +222,6 @@ void NCut (Graph * graph, int num_partitions, vector <int>& weights){
         }else{
             NCut(&negPartition,num_partitions/2,weights);
         }
-        
         return;
     }
 
